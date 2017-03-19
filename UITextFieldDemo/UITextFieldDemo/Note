@@ -1,0 +1,122 @@
+//
+//  ViewController.m
+//  UITextFieldDemo
+//
+//  Created by 黄健 on 2017/3/19.
+//  Copyright © 2017年 黄健. All rights reserved.
+//
+
+#import "ViewController.h"
+
+@implementation UITextField (Style)
+
+- (CGRect)placeholderRectForBounds:(CGRect)bounds {
+return UIEdgeInsetsInsetRect(bounds, UIEdgeInsetsMake(0, 12, 0, 0));
+}
+
+- (CGRect)editingRectForBounds:(CGRect)bounds {
+return UIEdgeInsetsInsetRect(bounds, UIEdgeInsetsMake(0, 10, 0, 0));
+}
+
+- (CGRect)textRectForBounds:(CGRect)bounds {
+return UIEdgeInsetsInsetRect(bounds, UIEdgeInsetsMake(0, 10, 0, 0));
+}
+
+@end
+
+@interface ViewController () <UITextFieldDelegate>
+
+@property (nonatomic, strong) UITextField * textField;
+
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+[super viewDidLoad];
+
+[self.view addSubview:self.textField];
+self.view.backgroundColor = [UIColor redColor];
+self.textField.backgroundColor = [UIColor whiteColor];
+self.textField.placeholder = @"请输入密码";
+self.textField.delegate = self;
+self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditing:) name:UITextFieldTextDidBeginEditingNotification object:nil];
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidEndEditing:) name:UITextFieldTextDidEndEditingNotification object:nil];
+}
+
+- (void)textDidBeginEditing:(NSNotification *)notification {
+NSLog(@"textDidBeginEditing");
+}
+
+- (void)textDidChange:(NSNotification *)notification {
+NSLog(@"textDidChange");
+}
+
+- (void)textDidEndEditing:(NSNotification *)notification {
+NSLog(@"textDidEndEditing");
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+[self.view endEditing:YES];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+NSLog(@"textFieldDidChange");
+
+// 限制最大字数，length
+//    NSInteger length = textField.text.length - range.length + string.length;
+//
+//    if (length > 5) {
+//        return NO;
+//    }
+// 过滤替换字符
+NSCharacterSet *cs;
+cs = [[NSCharacterSet characterSetWithCharactersInString:@" "] invertedSet];
+NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""];
+BOOL canChange = [string isEqualToString:filtered];
+
+return canChange;
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+NSLog(@"textFieldDidBeginEditing");
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+NSLog(@"textFieldDidEndEditing");
+}
+
+// 点击输入框右边的清除键调用该方法
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+return YES;
+}
+
+// 点击键盘Return键调用该方法
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+[textField resignFirstResponder];
+return YES;
+}
+
+- (UITextField *)textField {
+if (_textField == nil) {
+_textField = [[UITextField alloc] init];
+_textField.frame = CGRectMake(0, 0, 250, 40);
+_textField.center = CGPointMake(self.view.center.x, self.view.center.y - 100);
+}
+return _textField;
+}
+
+@end
