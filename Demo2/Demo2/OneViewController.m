@@ -25,7 +25,7 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     TwoViewController * two = [[TwoViewController alloc] init];
     UINavigationController * navigationController = [[UINavigationController alloc] initWithRootViewController:two];
-    navigationController.navigationBarHidden = NO;
+    navigationController.navigationBarHidden = YES;
     MZFormSheetPresentationViewController * formSheetController = [[MZFormSheetPresentationViewController alloc] initWithContentViewController:navigationController];
     formSheetController.contentViewCornerRadius = 5;
     formSheetController.contentViewControllerTransitionStyle = MZFormSheetPresentationTransitionStyleFade;

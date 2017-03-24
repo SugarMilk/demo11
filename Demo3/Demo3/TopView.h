@@ -12,9 +12,11 @@ typedef void(^id_block_t)(id object);
 
 @interface TopView : UIView
 
-@property (nonatomic, assign) BOOL logoHidden;
-@property (nonatomic, assign) BOOL backHidden;
+@property (nonatomic, readonly, strong) UIButton * backButton;
+@property (nonatomic, readonly, strong) UIImageView * logoImageView;
+@property (nonatomic, assign) BOOL logoImageViewHidden;
+@property (nonatomic, assign) BOOL backButtonHidden;
 
-- (void)dealWithBackButtonAction:(id_block_t)backAction;
+- (void)handleBackButtonActionBlock:(id_block_t)backButtonActionBlock;
 
 @end

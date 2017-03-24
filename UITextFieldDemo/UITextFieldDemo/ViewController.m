@@ -22,12 +22,20 @@
     GFTextFieldView * handler = [[GFTextFieldView alloc] init];
     handler.frame = CGRectMake(20, 20, 200, 40);
     handler.backgroundColor = [UIColor blueColor];
+    handler.textField.clearButtonMode = UITextFieldViewModeAlways;
+    [handler addWithButtonType:GFTextFieldButtonTypeLeft width:60];
+    [handler addWithButtonType:GFTextFieldButtonTypeRight width:50];
+    handler.textFieldEditDisabled = YES;
+    [handler handleRightButtonAction:^(id object) {
+        NSLog(@"右侧按钮被点击");
+    }];
     
     [handler handleTextFieldStatusBlock:^(GFTextField *textField, GFTextFieldStatusType textFieldStatusType) {
         NSLog(@"type: %lu, text: %@", (unsigned long)textFieldStatusType, textField.text);
     } shouldChangeBlock:^BOOL(GFTextField *textField, NSRange range, NSString *string) {
-        NSInteger length = textField.text.length - range.length + string.length;
-        return length <= 5;
+//        NSInteger length = textField.text.length - range.length + string.length;
+//        return length <= 5;
+        return YES;
     }];
     
     [self.view addSubview:handler];

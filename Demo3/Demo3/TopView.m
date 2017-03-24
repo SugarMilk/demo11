@@ -12,7 +12,7 @@
 
 @property (nonatomic, strong) UIButton * backButton;
 @property (nonatomic, strong) UIImageView * logoImageView;
-@property (nonatomic, copy) id_block_t backAction;
+@property (nonatomic, copy) id_block_t backButtonActionBlock;
 
 @end
 
@@ -23,34 +23,36 @@
         [self addSubview:self.backButton];
         [self addSubview:self.logoImageView];
         
-        self.backButton.frame = CGRectMake(0, 0, 30, 30);
-        self.logoImageView.frame = CGRectMake((self.frame.size.width - 50)/2, 0, 50, 30);
+        CGFloat width = self.bounds.size.width;
+        CGFloat height = self.bounds.size.height;
+        self.backButton.frame = CGRectMake(0, 0, height, height);
+        self.logoImageView.frame = CGRectMake((width - height)/2, 0, height, height);
     }
     return self;
 }
 
-- (void)setBackHidden:(BOOL)backHidden {
-    self.backButton.hidden = _backHidden = backHidden;
+- (void)setBackButtonHidden:(BOOL)backButtonHidden {
+    self.backButton.hidden = _backButtonHidden = backButtonHidden;
 }
 
-- (void)setLogoHidden:(BOOL)logoHidden {
-    self.logoImageView.hidden = _logoHidden = logoHidden;
+- (void)setLogoImageViewHidden:(BOOL)logoImageViewHidden {
+    self.logoImageView.hidden = _logoImageViewHidden = logoImageViewHidden;
 }
 
-- (void)dealWithBackButtonAction:(id_block_t)backAction {
-    self.backAction = backAction;
+- (void)handleBackButtonActionBlock:(id_block_t)backButtonActionBlock {
+    self.backButtonActionBlock = backButtonActionBlock;
 }
 
 - (void)backButtonAction:(UIButton *)button {
-    if (self.backAction) {
-        self.backAction(button);
+    if (self.backButtonActionBlock) {
+        self.backButtonActionBlock(button);
     }
 }
 
 - (UIButton *)backButton {
     if (_backButton == nil) {
         _backButton = [[UIButton alloc] init];
-        _backButton.backgroundColor = [UIColor redColor];
+        _backButton.backgroundColor = [UIColor whiteColor];
         [_backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _backButton;
@@ -59,7 +61,7 @@
 - (UIImageView *)logoImageView {
     if (_logoImageView == nil) {
         _logoImageView = [[UIImageView alloc] init];
-        _logoImageView.backgroundColor = [UIColor orangeColor];
+        _logoImageView.backgroundColor = [UIColor whiteColor];
     }
     return _logoImageView;
 }

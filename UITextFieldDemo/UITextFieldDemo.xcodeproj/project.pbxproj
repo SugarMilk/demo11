@@ -283,6 +283,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = RGDB7M59PE;
 				INFOPLIST_FILE = UITextFieldDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "--.UITextFieldDemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -295,6 +296,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = RGDB7M59PE;
 				INFOPLIST_FILE = UITextFieldDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "--.UITextFieldDemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -320,6 +322,7 @@
 				7EAF7FF61E7E71FE00CD10FF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -383,7 +383,17 @@ CGFloat const MZFormSheetPresentationControllerDefaultAboveKeyboardMargin = 20;
             self.didTapOnBackgroundViewCompletionHandler(location);
         }
         if (self.shouldDismissOnBackgroundViewTap) {
+        #if 1
+            MZFormSheetPresentationViewController * vc = (id)self.presentedViewController;
+            UINavigationController * nav = vc.contentViewController;
+            if (nav.viewControllers.count == 1) {
+                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            } else {
+                [nav popViewControllerAnimated:YES];
+            }
+        #else // 修改前，原始代码
             [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        #endif
         }
     }
 }

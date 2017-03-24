@@ -11,15 +11,36 @@
 @implementation GFTextField
 
 - (CGRect)placeholderRectForBounds:(CGRect)bounds {
+    if (UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsetsZero, self.placeholderInsets)) {
+        return [super placeholderRectForBounds:bounds];
+    }
     return UIEdgeInsetsInsetRect(bounds, self.placeholderInsets);
 }
 
 - (CGRect)editingRectForBounds:(CGRect)bounds {
+    if (UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsetsZero, self.textInsets)) {
+        return [super editingRectForBounds:bounds];
+    }
     return UIEdgeInsetsInsetRect(bounds, self.textInsets);
 }
 
 - (CGRect)textRectForBounds:(CGRect)bounds {
+    if (UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsetsZero, self.textInsets)) {
+        return [super textRectForBounds:bounds];
+    }
     return UIEdgeInsetsInsetRect(bounds, self.textInsets);
+}
+
+- (void)setCursorColor:(UIColor *)cursorColor {
+    self.tintColor = cursorColor;
+}
+
+- (void)setPlaceholderColor:(UIColor *)placeholderColor {
+    [self setValue:placeholderColor forKeyPath:@"_placeholderLabel.textColor"];
+}
+
+- (void)setPlaceholderFontSize:(CGFloat)placeholderFontSize {
+    [self setValue:[UIFont systemFontOfSize:placeholderFontSize] forKeyPath:@"_placeholderLabel.font"];
 }
 
 @end
@@ -27,6 +48,9 @@
 @interface GFTextFieldView () <UITextFieldDelegate>
 
 @property (nonatomic, strong) GFTextField * textField;
+@property (nonatomic, strong) UIButton * leftButton;
+@property (nonatomic, strong) UIButton * rightButton;
+@property (nonatomic, copy) GFTextFieldButtonActionBlock buttonActionBlock;
 @property (nonatomic, copy) GFTextFieldStatusBlock textFieldStatusBlock;
 @property (nonatomic, copy) GFTextFieldShouldChangeBlock textFieldShouldChangeBlock;
 
@@ -48,10 +72,34 @@
     }
 }
 
+- (void)addWithButtonType:(GFTextFieldButtonType)type width:(CGFloat)width {
+    if (type == GFTextFieldButtonTypeLeft) {
+        CGRect rect = self.bounds;
+        rect.size.width = width;
+        self.leftButton.frame = rect;
+        self.textField.leftView = self.leftButton;
+        self.textField.leftViewMode = UITextFieldViewModeAlways;
+    } else {
+        CGRect rect = self.bounds;
+        rect.size.width = width;
+        self.rightButton.frame = rect;
+        self.textField.rightView = self.rightButton;
+        self.textField.rightViewMode = UITextFieldViewModeAlways;
+    }
+}
+
+- (void)handleRightButtonAction:(GFTextFieldButtonActionBlock)buttonActionBlock {
+    self.buttonActionBlock = buttonActionBlock;
+}
+
 - (void)handleTextFieldStatusBlock:(GFTextFieldStatusBlock)statusBlock
                  shouldChangeBlock:(GFTextFieldShouldChangeBlock)shouldChangBlock {
     self.textFieldStatusBlock = statusBlock;
     self.textFieldShouldChangeBlock = shouldChangBlock;
+}
+
+- (void)rightButtonAction:(UIButton *)button {
+    self.buttonActionBlock(button);
 }
 
 - (void)layoutSubviews {
@@ -59,6 +107,10 @@
 }
 
 #pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    return self.textFieldEditDisabled == NO;
+}
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (self.textFieldShouldChangeBlock) {
@@ -83,9 +135,24 @@
     if (_textField == nil) {
         _textField = [[GFTextField alloc] init];
         _textField.delegate = self;
-        _textField.backgroundColor = [UIColor whiteColor];
     }
     return _textField;
+}
+
+- (UIButton *)leftButton {
+    if (_leftButton == nil) {
+        _leftButton = [[UIButton alloc] init];
+        _leftButton.userInteractionEnabled = NO;
+    }
+    return _leftButton;
+}
+
+- (UIButton *)rightButton {
+    if (_rightButton == nil) {
+        _rightButton = [[UIButton alloc] init];
+        [_rightButton addTarget:self action:@selector(rightButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _rightButton;
 }
 
 - (void)dealloc {

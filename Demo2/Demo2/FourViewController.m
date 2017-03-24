@@ -21,6 +21,12 @@
     self.view.backgroundColor = [UIColor orangeColor];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    NSLog(@"- %@", NSStringFromCGRect(self.view.frame));
+}
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 #if 1
     [self dismissViewControllerAnimated:self.navigationController completion:nil];

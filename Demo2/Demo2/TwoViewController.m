@@ -23,8 +23,8 @@
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    ThreeViewController * three = [[ThreeViewController alloc] init];
-    [self.navigationController pushViewController:three animated:YES];
+//    ThreeViewController * three = [[ThreeViewController alloc] init];
+//    [self.navigationController pushViewController:three animated:YES];
 }
 
 @end
